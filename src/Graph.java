@@ -25,4 +25,23 @@ public class Graph {
 			}
 		}
 	}
+	public String serialize() {
+		StringBuilder s = new StringBuilder();
+		s.append(m);
+		s.append(" ");
+		s.append(n);
+		s.append(" ");
+		for (int i = 0; i < m; i++) {
+			for (int j = 0; j < n; j++) {
+				s.append(g[i][j]);
+				s.append(" ");
+			}
+		}
+		return s.toString();
+	}
+	
+	public Graph getCommitment(int v) {
+		return null;
+		
+	}
 }
