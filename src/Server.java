@@ -1,11 +1,12 @@
 import java.lang.*;
 import java.io.*;
 import java.net.*;
-import java.util.Scanner;
+
 
 class Server {
 	public static void main(String args[]) {
 		String data = new String();
+		data = "Asd";
 		try {
 			ServerSocket serverSocket = new ServerSocket(11234);
 			while (true) {
@@ -13,10 +14,12 @@ class Server {
 				SocketAddress clientAddress = socket.getRemoteSocketAddress();
 				System.out
 						.print("S: Connection Incoming at \n" + clientAddress);
-				Scanner in = new Scanner(socket.getInputStream());
+				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter out = new PrintWriter(socket.getOutputStream(),
 						true);
-				out.print(data);
+				out.println(data);
+				Thread.sleep(2300);
+				out.println(data);
 				out.close();
 				socket.close();
 			}

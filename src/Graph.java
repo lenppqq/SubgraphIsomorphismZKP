@@ -47,6 +47,13 @@ public class Graph {
 
 	public Graph getCommitment(int v) {
 		return null;
+	}
+	
+	public Graph getPermuatation(int[] p) {
+		return null;
+	}
 
+	public Graph getSubgraph() {
+		return null;
 	}
 }
