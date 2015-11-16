@@ -1,11 +1,5 @@
-
-/**
- * This class is used to represent a graph
- * @author Peng Liang (liangp@purdue.edu)
- *
- */
 public class Graph {
-	
+
 	public int[][] g;
 	public int n;
 	
@@ -23,27 +17,36 @@ public class Graph {
 		}
 	}
 
-	/**
-	 * Constructor constructs a new graph P = permutation(G)
-	 * @param G a graph
-	 * @param permutation a permutation of G's nodes
-	 */
-	public Graph(Graph G, int[] permutation) throws Exception{
-		this.n = G.n;
-		if (n != permutation.length) {
-			throw new Exception("invalid permutation on graph G!");
-		}
-		g = new int[n][n];
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < n; j++){
-				g[permutation[i]][permutation[j]] = G.g[i][j];
-			}
-		}
+	public Graph(String s) throws Exception {
+		deserialize(s);
 	}
 
-	public void addEdge(int v1, int v2) {
-		g[v1][v2] = 1;
-		g[v2][v1] = 1;
+	public String serialize() {
+		StringBuilder s = new StringBuilder();
+		s.append(n);
+		s.append(" ");
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				s.append(g[i][j]);
+				s.append(" ");
+			}
+		}
+		return s.toString();
+	}
+
+	public static Graph deserialize(String s) throws Exception {
+		String[] items = s.split(" ");
+		int n = Integer.parseInt(items[0]);
+		if (items.length != n * n + 1) {
+			throw new Exception("Invalid input for deseriablization!");
+		}
+		Graph G = new Graph(n);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				G.g[i][j] = Integer.parseInt(items[n * i + j + 1]);
+			}
+		}
+		return G;
 	}
 
 	/** 
@@ -66,5 +69,29 @@ public class Graph {
 		return true;
 	}
 
+	public Graph getCommitment(int v) {
+		return null;
+	}
+
+	/**
+	 * @param permutation a permutation of G's nodes
+	 * returns a new graph P = permutation(G)
+	 */
+	public Graph getPermutation(int[] permutation) throws Exception{
+		if (n != permutation.length) {
+			throw new Exception("invalid permutation on graph G!");
+		}
+		Graph P = new Graph(this.n);
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < n; j++){
+				P.g[permutation[i]][permutation[j]] = g[i][j];
+			}
+		}
+		return P;
+	}
+
+	public Graph getSubgraph() {
+		return null;
+	}
 
 }
