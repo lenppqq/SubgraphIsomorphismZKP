@@ -69,8 +69,18 @@ public class Graph {
 		return true;
 	}
 
-	public Graph getCommitment(int v) {
-		return null;
+	/**
+	 * @param v an integer used to generate the commitment graph
+	 * returns a commitement graph C s.t. C[i][j] = Hash(i + j + G[i][j] + v)
+	 */
+	public CommitmentGraph getCommitment(int v) {
+		CommitmentGraph CG = new CommitmentGraph(this.n);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				CG.generateCommitmentAt(i, j, g[i][j], v);
+			}
+		}
+		return CG;
 	}
 
 	/**
