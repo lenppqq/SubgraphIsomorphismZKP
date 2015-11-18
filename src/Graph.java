@@ -54,14 +54,14 @@ public class Graph {
 	 * @param G a graph
 	 * @param permutation a permutation of G's nodes
 	 */
-	public boolean isIsomorphic(Graph G, int[] permutation) {
-		if ((G.n != this.n) || (permutation.length != G.n)) {
+	public boolean isIsomorphic(Graph P, int[] permutation) {
+		if ((P.n != this.n) || (permutation.length != P.n)) {
 			return false;
 		}
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++){
-				if (g[permutation[i]][permutation[j]] != G.g[i][j]) {
+				if (g[permutation[i]][permutation[j]] != P.g[i][j]) {
 					return false;
 				}
 			}
@@ -74,13 +74,7 @@ public class Graph {
 	 * returns a commitement graph C s.t. C[i][j] = Hash(i + j + G[i][j] + v)
 	 */
 	public CommitmentGraph getCommitment(int v) {
-		CommitmentGraph CG = new CommitmentGraph(this.n);
-		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				CG.generateCommitmentAt(i, j, g[i][j], v);
-			}
-		}
-		return CG;
+		return new CommitmentGraph(this, v);
 	}
 
 	/**
