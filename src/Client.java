@@ -5,19 +5,18 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 
 public class Client {
 	public static void main(String[] args) {
 		if ((args.length < 2) || (args.length > 3)) {
-			throw new IllegalArgumentException("Usage: g1 g2 Server [Port]");
+			throw new IllegalArgumentException("Usage: g2 Server [Port]");
 		}
-		Graph p = null, q = null;
+		Graph q = null;
 		Graph g1 = null, g2 = null;
 		File f_g2 = new File(args[0]);
 		String line;
-		int m1 = 0, m2 = 0, n1 = 0, n2 = 0;
+		int m2 = 0, n2 = 0; // counts the rows and columns of g2
 		try {
 			BufferedReader reader2 = new BufferedReader(new FileReader(f_g2));
 			// Open file for g2
@@ -38,6 +37,7 @@ public class Client {
 			n2 = lines2.get(0).split(" ").length;
 			// get number of columns of g2
 
+			// verify that matrix is a square
 			if (n2 <= 0 || m2 != n2) {
 				throw new Exception("Invalid Input");
 			}
@@ -66,24 +66,61 @@ public class Client {
 					socket.getInputStream()));
 			PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
 
-			// get g2
-			g2 = g1.getSubgraph();
-			
+			// get g'
+			Graph gPrime = g2.getSubgraph();
+			// generate a permutation between g1 and g'
+			int[] perm = new int[n2];
+			for (int i = 0; i < n2; i++) {
+				perm[i] = i;
+			}
+			randomPermute(perm);
+			// get g1
+			g1 = gPrime.depermutation(perm);
+
 			// send g1 and g2 to server
 			out.println(g1.serialize());
 			out.println(g2.serialize());
+			Random random = new Random();
+			int randomNumber;
+			for (int round = 0; round < 100; round++) {
+				randomNumber = random.nextInt();
+				// generate permutation alpha for G2
+				int[] alpha = new int[n2];
+				for (int i = 0; i < n2; i++) {
+					alpha[i] = i;
+				}
+				randomPermute(alpha);
+				q = g2.getPermutation(alpha);
 
-			// generate permutation alpha for G2
-			int[] alpha = new int[n2];
-			for (int i = 0; i < n2; i++) {
-				alpha[i] = i;
+				line = in.readLine();
+				System.out.println(line);
+				CommitmentGraph commitQ = new CommitmentGraph(q, randomNumber);
+				out.println(commitQ.serialize());
+				int b = Integer.parseInt(in.readLine());
+				if (b == 0) {
+					// the challenge bit is zero
+					// send alpha
+					out.println(Server.serializePermutation(alpha));
+					// send graph q
+					out.println(q.serialize());
+					// send random n used for commitment
+					out.println(randomNumber);
+				} else {
+					// the challenge bit is one
+					// get Q'
+					Graph qPrime = gPrime.getPermutation(alpha);
+					// send Q'
+					out.println(qPrime.serialize());
+					// get pi
+					// perm(G1) = G', alpha(G') = Q'
+					int[] pi = new int[n2];
+					for (int i = 0; i < n2; i++) {
+						pi[i] = alpha[perm[i]];
+					}
+					// send pi
+					out.println(Server.serializePermutation(pi));
+				}
 			}
-			randomPermute(alpha);
-			q = g2.getPermutation(alpha);
-
-			line = in.readLine();
-			System.out.println(line);
-			out.println(q.serialize());
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();

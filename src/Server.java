@@ -18,9 +18,11 @@ class Server {
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter out = new PrintWriter(socket.getOutputStream(),
 						true);
-				out.println(data);
-				Thread.sleep(2300);
-				out.println(data);
+				if (verify(in, out)) {
+					out.println("Verified");
+				} else {
+					out.println("Refused");
+				}
 				out.close();
 				socket.close();
 			}

@@ -94,6 +94,19 @@ public class Graph {
 		return P;
 	}
 
+	public Graph depermutation(int[] permutation) throws Exception{
+		if (n != permutation.length) {
+			throw new Exception("invalid permutation on graph G!");
+		}
+		Graph P = new Graph(this.n);
+		for (int i = 0; i < n; i++){
+			for (int j = 0; j < n; j++){
+				P.g[i][j] = g[permutation[i]][permutation[j]];
+			}
+		}
+		return P;
+	}	
+	
 	public Graph getSubgraph() {
 		return null;
 	}
