@@ -13,7 +13,7 @@ public class Client {
 			throw new IllegalArgumentException("Usage: g2 Server [Port]");
 		}
 		Graph q = null;
-		Graph g1 = null, g2 = null;
+		Graph g1 = null, g2 = new Graph(5);
 		File f_g2 = new File(args[0]);
 		String line;
 		int m2 = 0, n2 = 0; // counts the rows and columns of g2
@@ -91,12 +91,10 @@ public class Client {
 				}
 				randomPermute(alpha);
 				q = g2.getPermutation(alpha);
-
-				line = in.readLine();
-				System.out.println(line);
 				CommitmentGraph commitQ = new CommitmentGraph(q, randomNumber);
 				out.println(commitQ.serialize());
-				int b = Integer.parseInt(in.readLine());
+				String bString = in.readLine();
+				int b = Integer.parseInt(bString);
 				if (b == 0) {
 					// the challenge bit is zero
 					// send alpha
@@ -119,7 +117,12 @@ public class Client {
 					}
 					// send pi
 					out.println(Server.serializePermutation(pi));
+					// send random n used for commitment
+					out.println(randomNumber);
 				}
+
+				System.out.println(in.readLine());
+
 			}
 			socket.close();
 		} catch (Exception e) {

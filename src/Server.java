@@ -71,6 +71,7 @@ class Server {
 					return false;
 				}
 			}
+			out.println("Continue");
 		}
 		return true;
 	}

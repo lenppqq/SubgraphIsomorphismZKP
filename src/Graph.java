@@ -1,11 +1,15 @@
+import java.util.Random;
+
 public class Graph {
 
 	public int[][] g;
 	public int n;
-	
+
 	/**
 	 * Constructor
-	 * @param n number of vertices of the graph
+	 * 
+	 * @param n
+	 *            number of vertices of the graph
 	 */
 	public Graph(int n) {
 		this.n = n;
@@ -18,7 +22,8 @@ public class Graph {
 	}
 
 	public Graph(String s) throws Exception {
-		deserialize(s);
+		this.g = deserialize(s).g;
+		this.n = Integer.parseInt(s.split(" ")[0]);
 	}
 
 	public String serialize() {
@@ -49,19 +54,22 @@ public class Graph {
 		return G;
 	}
 
-	/** 
+	/**
 	 * Verify if P = permutation(G)
-	 * @param G a graph
-	 * @param permutation a permutation of G's nodes
+	 * 
+	 * @param G
+	 *            a graph
+	 * @param permutation
+	 *            a permutation of G's nodes
 	 */
-	public boolean isIsomorphic(Graph P, int[] permutation) {
-		if ((P.n != this.n) || (permutation.length != P.n)) {
+	public boolean isIsomorphic(Graph P, int[] perm) {
+		if ((P.n != this.n) || (perm.length != P.n)) {
 			return false;
 		}
 
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++){
-				if (g[permutation[i]][permutation[j]] != P.g[i][j]) {
+			for (int j = 0; j < n; j++) {
+				if (g[i][j] != P.g[perm[i]][perm[j]]) {
 					return false;
 				}
 			}
@@ -70,45 +78,54 @@ public class Graph {
 	}
 
 	/**
-	 * @param v an integer used to generate the commitment graph
-	 * returns a commitement graph C s.t. C[i][j] = Hash(i + j + G[i][j] + v)
+	 * @param v
+	 *            an integer used to generate the commitment graph returns a
+	 *            commitement graph C s.t. C[i][j] = Hash(i + j + G[i][j] + v)
 	 */
 	public CommitmentGraph getCommitment(int v) {
 		return new CommitmentGraph(this, v);
 	}
 
 	/**
-	 * @param permutation a permutation of G's nodes
-	 * returns a new graph P = permutation(G)
+	 * @param permutation
+	 *            a permutation of G's nodes returns a new graph P =
+	 *            permutation(G)
 	 */
-	public Graph getPermutation(int[] permutation) throws Exception{
+	public Graph getPermutation(int[] permutation) throws Exception {
 		if (n != permutation.length) {
 			throw new Exception("invalid permutation on graph G!");
 		}
 		Graph P = new Graph(this.n);
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < n; j++){
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				P.g[permutation[i]][permutation[j]] = g[i][j];
 			}
 		}
 		return P;
 	}
 
-	public Graph depermutation(int[] permutation) throws Exception{
+	public Graph depermutation(int[] permutation) throws Exception {
 		if (n != permutation.length) {
 			throw new Exception("invalid permutation on graph G!");
 		}
 		Graph P = new Graph(this.n);
-		for (int i = 0; i < n; i++){
-			for (int j = 0; j < n; j++){
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
 				P.g[i][j] = g[permutation[i]][permutation[j]];
 			}
 		}
 		return P;
-	}	
-	
+	}
+
 	public Graph getSubgraph() {
-		return null;
+		int r = new Random().nextInt(n);
+		Graph g = new Graph(n);
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				g.g[i][j] = (i == r || j == r) ? 0 : this.g[i][j];
+			}
+		}
+		return g;
 	}
 
 }

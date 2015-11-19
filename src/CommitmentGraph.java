@@ -88,7 +88,7 @@ public class CommitmentGraph {
 	private String commitment(int i, int j, int value, int r) {
 		try {
 			MessageDigest md = MessageDigest.getInstance("SHA");
-			String inputString = "" + i + j + g[i][j] + r;
+			String inputString = "" + i + j + value + r;
 			md.update(inputString.getBytes("UTF-8"));
      		byte[] commitmentBytes = md.digest();
      		String commitmentString = DatatypeConverter.printHexBinary(commitmentBytes);
