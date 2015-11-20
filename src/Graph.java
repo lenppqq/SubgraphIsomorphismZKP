@@ -2,7 +2,7 @@ import java.util.Random;
 
 public class Graph {
 
-	public int[][] g;
+	public int[][] g; // if g[i][j] == 2, then it means this is a subgraph, and g[i][j] of the original is not included
 	public int n;
 
 	/**
@@ -118,14 +118,22 @@ public class Graph {
 	}
 
 	public Graph getSubgraph() {
-		int r = new Random().nextInt(n);
-		Graph g = new Graph(n);
+		Random r = new Random();
+		Graph SG = new Graph(n);
 		for (int i = 0; i < n; i++) {
-			for (int j = 0; j < n; j++) {
-				g.g[i][j] = (i == r || j == r) ? 0 : this.g[i][j];
+			for (int j = i; j < n; j++) {
+				if (r.nextInt(1) == 0) {
+					// g[i][j] and g[j][i] is not included
+					SG.g[i][j] = 2;
+					SG.g[j][i] = 2;
+				} else {
+					// g[i][j] and g[j][i] is included
+					SG.g[i][j] = this.g[i][j];
+					SG.g[j][i] = this.g[j][i];
+				}
 			}
 		}
-		return g;
+		return SG;
 	}
 
 }
