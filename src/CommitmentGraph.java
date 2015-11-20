@@ -60,13 +60,14 @@ public class CommitmentGraph {
 	 * @param G a graph to be checked
 	 * @param r the random used to generate the commitment graph
 	 * returns true if for each pair (i, j), g[i][j] = Hash(i || j || G.g[i][j] || r)
+	 * if G is a subgraph, then for each pair (i, j) s.t. g[i][j] != 2, g[i][j] = Hash(i || j || G.g[i][j] || r)
 	 */
 	public boolean verifyCommitment(Graph G, int r) {
 		if (G.n != this.n) return false;
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (!verifyCommitmentAt(i, j, G.g[i][j], r)) {
+				if (G.g[i][j] !=2 & !verifyCommitmentAt(i, j, G.g[i][j], r)) {
 					return false;
 				}
 			}
@@ -81,7 +82,7 @@ public class CommitmentGraph {
 	 * returns true if g[i][j] = Hash(i || j || value || r)
 	 */
 
-	public boolean verifyCommitmentAt(int i, int j, int value, int r) {
+	private boolean verifyCommitmentAt(int i, int j, int value, int r) {
 		return g[i][j] != null && g[i][j].equals(this.commitment(i, j, value, r));
 	}
 

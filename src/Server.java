@@ -61,13 +61,12 @@ class Server {
 
 			// read the response from prover
 			if (b == 0) {
-				if (!verifyBitZero(in, commitmentQ, G2)) {
+				if (!verify(in, commitmentQ, G2)) {
 					return false;
 				}
-
 			} else {
 				// the request should be pi, and Q'
-				if (!verifyBitOne(in)) {
+				if (!verify(in, commitmentQ, G1)) {
 					return false;
 				}
 			}
@@ -76,17 +75,18 @@ class Server {
 		return true;
 	}
 
-	private static boolean verifyBitZero(BufferedReader in, CommitmentGraph commitmentQ, Graph G2) {
-		// the request should be alpha, and Q
+	private static boolean verify(BufferedReader in, CommitmentGraph commitmentQ, Graph G) {
+		// if it's challenge 0, then the request should be alpha, and Q
+		// else, the request should be pi, and Q'
 		Graph Q;
-		int[] alpha;
+		int[] permutation;
 		int r;
 		try {
-			// parse permutation alpha
-			String alphaString = in.readLine();
-			alpha = deserializePermutation(alphaString);
+			// parse permutation 
+			String permString = in.readLine();
+			permutation = deserializePermutation(permString);
 
-			// pasrse graph Q
+			// pasrse response graph Q(or Q')
 			String QString = in.readLine();
 			Q = Graph.deserialize(QString);
 					
@@ -99,20 +99,16 @@ class Server {
 			return false;
 		} 
 
-		// check Q = alpha(G2)
-		if (!G2.isIsomorphic(Q, alpha)) {
-			System.out.println("G2 is not the given permutation of Q");
+		// check Q = alpha(G2) or Q' = pi(G1)
+		if (!G.isIsomorphic(Q, permutation)) {
+			System.out.println("Verification of the permutation failed!");
 			return false;
 		}
-		// check Q is the graph committed
+		// check Q/Q' is the graph committed
 		if (!commitmentQ.verifyCommitment(Q, r)) {
 			System.out.println("Q is not the commited graph");
 			return false;
 		}
-		return true;
-	}
-
-	private static boolean verifyBitOne(BufferedReader out) {
 		return true;
 	}
 
