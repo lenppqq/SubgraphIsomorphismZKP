@@ -56,6 +56,7 @@ public class Graph {
 
 	/**
 	 * Verify if P = permutation(G)
+	 * in our case, P & G will either both be graph, or subgraph
 	 * 
 	 * @param G
 	 *            a graph
@@ -69,7 +70,10 @@ public class Graph {
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (g[i][j] != P.g[perm[i]][perm[j]]) {
+				if (g[i][j] == 1 && g[i][j] != P.g[perm[i]][perm[j]]) {
+					return false;
+				} else if (g[i][j] != 1 && P.g[perm[i]][perm[j]] == 1) {
+					// if g[i][j] != 1, then it might be 0 or 2(equivalent to 0, but indicate it's a missing entry from the original graph)
 					return false;
 				}
 			}

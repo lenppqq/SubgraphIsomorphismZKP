@@ -67,7 +67,7 @@ public class CommitmentGraph {
 
 		for (int i = 0; i < n; i++) {
 			for (int j = 0; j < n; j++) {
-				if (G.g[i][j] !=2 & !verifyCommitmentAt(i, j, G.g[i][j], r)) {
+				if (G.g[i][j] != 2 & !verifyCommitmentAt(i, j, G.g[i][j], r)) {
 					return false;
 				}
 			}

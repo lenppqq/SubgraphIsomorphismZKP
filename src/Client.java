@@ -124,6 +124,7 @@ public class Client {
 				System.out.println(in.readLine());
 
 			}
+			System.out.println(in.readLine());
 			socket.close();
 		} catch (Exception e) {
 			e.printStackTrace();

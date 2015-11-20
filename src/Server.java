@@ -14,7 +14,7 @@ class Server {
 				Socket socket = serverSocket.accept();
 				SocketAddress clientAddress = socket.getRemoteSocketAddress();
 				System.out
-						.print("S: Connection Incoming at \n" + clientAddress);
+						.println("S: Connection Incoming at" + clientAddress);
 				BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 				PrintWriter out = new PrintWriter(socket.getOutputStream(),
 						true);
@@ -61,12 +61,11 @@ class Server {
 
 			// read the response from prover
 			if (b == 0) {
-				if (!verify(in, commitmentQ, G2)) {
+				if (!verifyHelper(in, commitmentQ, G2)) {
 					return false;
 				}
 			} else {
-				// the request should be pi, and Q'
-				if (!verify(in, commitmentQ, G1)) {
+				if (!verifyHelper(in, commitmentQ, G1)) {
 					return false;
 				}
 			}
@@ -75,7 +74,7 @@ class Server {
 		return true;
 	}
 
-	private static boolean verify(BufferedReader in, CommitmentGraph commitmentQ, Graph G) {
+	private static boolean verifyHelper(BufferedReader in, CommitmentGraph commitmentQ, Graph G) {
 		// if it's challenge 0, then the request should be alpha, and Q
 		// else, the request should be pi, and Q'
 		Graph Q;
