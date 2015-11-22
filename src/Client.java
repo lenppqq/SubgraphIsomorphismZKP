@@ -13,7 +13,7 @@ public class Client {
 			throw new IllegalArgumentException("Usage: g2 Server [Port]");
 		}
 		Graph q = null;
-		Graph g1 = null, g2 = new Graph(5);
+		Graph g1 = null, g2 = null;
 		File f_g2 = new File(args[0]);
 		String line;
 		int m2 = 0, n2 = 0; // counts the rows and columns of g2
@@ -41,7 +41,7 @@ public class Client {
 			if (n2 <= 0 || m2 != n2) {
 				throw new Exception("Invalid Input");
 			}
-			g1 = new Graph(n2);
+			g2 = new Graph(n2);
 			// instantiate g2
 
 			// copy data into g2
