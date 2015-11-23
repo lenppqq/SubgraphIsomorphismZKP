@@ -126,7 +126,7 @@ public class Graph {
 		Graph SG = new Graph(n);
 		for (int i = 0; i < n; i++) {
 			for (int j = i; j < n; j++) {
-				if (r.nextInt(1) == 0) {
+				if (r.nextInt(2) == 0) {
 					// g[i][j] and g[j][i] is not included
 					SG.g[i][j] = 2;
 					SG.g[j][i] = 2;
@@ -138,6 +138,18 @@ public class Graph {
 			}
 		}
 		return SG;
+	}
+
+	public String toString() {
+		String s = "";
+		for (int i = 0; i < n; i++) {
+			for (int j = 0; j < n; j++) {
+				s += g[i][j];
+				s += " ";
+			}
+			s += "\n";
+		}
+		return s;
 	}
 
 }

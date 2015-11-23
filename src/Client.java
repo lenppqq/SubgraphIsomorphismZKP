@@ -104,11 +104,7 @@ public class Client {
 					// send random n used for commitment
 					out.println(randomNumber);
 				} else {
-					// the challenge bit is one
-					// get Q'
-					Graph qPrime = gPrime.getPermutation(alpha);
-					// send Q'
-					out.println(qPrime.serialize());
+					// the challenge bit is one	
 					// get pi
 					// perm(G1) = G', alpha(G') = Q'
 					int[] pi = new int[n2];
@@ -117,11 +113,22 @@ public class Client {
 					}
 					// send pi
 					out.println(Server.serializePermutation(pi));
+
+					// get Q'
+					Graph qPrime = gPrime.getPermutation(alpha);
+					// send Q'
+					out.println(qPrime.serialize());
+
 					// send random n used for commitment
 					out.println(randomNumber);
 				}
 
-				System.out.println(in.readLine());
+				String result = in.readLine();
+				System.out.println(result);
+				if (result.equals("Refused")) {
+					System.out.println("Verifcation refused. Stop here.");
+					return;
+				}
 
 			}
 			System.out.println(in.readLine());

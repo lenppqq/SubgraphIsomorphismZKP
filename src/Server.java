@@ -56,7 +56,7 @@ class Server {
 				return false;
 			}
 			// send the challenge to prover
-			int b = random.nextInt(1);
+			int b = random.nextInt(2);
 			out.println(b);
 
 			// read the response from prover
@@ -69,7 +69,8 @@ class Server {
 					return false;
 				}
 			}
-			out.println("Continue");
+			System.out.println("Pass round " + (i+1));
+			out.println("Pass round " + (i+1));
 		}
 		return true;
 	}
